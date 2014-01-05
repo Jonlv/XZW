@@ -1,0 +1,25 @@
+//
+// Prefix header for all source files of the 'XZW' target in the 'XZW' project
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+
+
+#define IS_retina ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2)
+
+#define TotalScreenHeight   [[UIScreen mainScreen] bounds].size.height
+
+#define IS_iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
+
+#define BelowiOS6  [[[UIDevice currentDevice] systemVersion] floatValue] < 6.0f
+
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif
