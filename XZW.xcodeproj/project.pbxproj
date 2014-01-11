@@ -1598,22 +1598,9 @@
 		16214D4717C2FC1000483E02 = {
 			isa = PBXGroup;
 			children = (
-				936585D71851D08D00ED89C4 /* AudioToolbox.framework */,
-				93D409E7184871D300831BA9 /* MessageUI.framework */,
-				93D409E518486FEF00831BA9 /* CoreTelephony.framework */,
-				93EF5FEC183EEB240083AF1F /* SDWebImage.framework */,
-				93E3C6E0180929A300E28983 /* CoreLocation.framework */,
-				93DC190D17E7F36100464E30 /* AssetsLibrary.framework */,
-				93BED23317DDB81F0035BABA /* CoreText.framework */,
 				93BED23117DDB8170035BABA /* libicucore.dylib */,
 				930C9D4B17D864E300293495 /* libsqlite3.dylib */,
-				16214DD517C302C800483E02 /* MapKit.framework */,
-				16214DD317C302BE00483E02 /* ImageIO.framework */,
-				16214DD117C3024400483E02 /* QuartzCore.framework */,
 				16214DCF17C3023100483E02 /* libz.dylib */,
-				16214DCD17C3022100483E02 /* MobileCoreServices.framework */,
-				16214DCB17C3021800483E02 /* SystemConfiguration.framework */,
-				16214DC917C3020E00483E02 /* CFNetwork.framework */,
 				16214D5917C2FC1000483E02 /* XZW */,
 				16214D5217C2FC1000483E02 /* Frameworks */,
 				16214D5117C2FC1000483E02 /* Products */,
@@ -1631,6 +1618,19 @@
 		16214D5217C2FC1000483E02 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16214DCD17C3022100483E02 /* MobileCoreServices.framework */,
+				16214DCB17C3021800483E02 /* SystemConfiguration.framework */,
+				16214DC917C3020E00483E02 /* CFNetwork.framework */,
+				16214DD517C302C800483E02 /* MapKit.framework */,
+				16214DD317C302BE00483E02 /* ImageIO.framework */,
+				16214DD117C3024400483E02 /* QuartzCore.framework */,
+				936585D71851D08D00ED89C4 /* AudioToolbox.framework */,
+				93D409E7184871D300831BA9 /* MessageUI.framework */,
+				93D409E518486FEF00831BA9 /* CoreTelephony.framework */,
+				93EF5FEC183EEB240083AF1F /* SDWebImage.framework */,
+				93E3C6E0180929A300E28983 /* CoreLocation.framework */,
+				93DC190D17E7F36100464E30 /* AssetsLibrary.framework */,
+				93BED23317DDB81F0035BABA /* CoreText.framework */,
 				16214D5317C2FC1000483E02 /* UIKit.framework */,
 				16214D5517C2FC1000483E02 /* Foundation.framework */,
 				16214D5717C2FC1000483E02 /* CoreGraphics.framework */,
