@@ -8,11 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface XZWMenuViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>{
-    
-    
+@interface XZWMenuViewController : UIViewController <UITableViewDataSource,UITableViewDelegate> {
+
     UITableView *menuTable;
-    
 }
 
 @end

@@ -14,39 +14,35 @@
 
 @protocol MessageDelegate <NSObject>
 
-
 -(void)clickMessageIndex:(NSDictionary*)messageDic;
-
 -(void)deleteMessageIndex:(NSDictionary*)messageDic;
 
 @end
 
 
-@interface XZWMessageView : UIView<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate>{
-    
-    
+@interface XZWMessageView : UIView <UITableViewDataSource, UITableViewDelegate,EGORefreshTableHeaderDelegate> {
+
     ASIHTTPRequest *getMessageRequest;
-    
+
     NSMutableArray *messageArray;
-    
+
     BOOL isLoading;
-    
+
     BOOL isFinished;
-    
+
     int current;
-    
+
     NSMutableString *linkString;
-    
+
     EGORefreshTableHeaderView *refreshView;
-    
+
     UITableView *myTableView;
-    
+
     int totalPage;
-    
 }
 
-@property (nonatomic, retain) EGORefreshTableHeaderView        *refreshTableView;
-@property (nonatomic, assign)  id<MessageDelegate>  delegate;
+@property (nonatomic, retain) EGORefreshTableHeaderView* refreshTableView;
+@property (nonatomic, assign)  id<MessageDelegate> delegate;
 
 - (id)initWithFrame:(CGRect)frame andLinkString:(NSString*)linkStringArg;
 

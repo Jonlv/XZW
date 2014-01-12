@@ -16,46 +16,43 @@
 
 @optional
 
--(void)selectQuanID:(int)quanID;
+- (void)selectQuanID:(int)quanID;
 
 @end
 
 
-@interface XZWQuanList : UIView<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate>{
-    
-    ASIHTTPRequest *resolveRequest;
-    
-    NSMutableArray *zhiDaoArray;
-    
-    BOOL isLoading;
-    
-    BOOL isFinished;
-    
-    int current;
-    
-    NSMutableString *linkPreString;
-    
-    
-    EGORefreshTableHeaderView *refreshView;
-    
-    UITableView *myTableView;
-    
-    int totalPage;
-    
-    UIViewController *ref;
-     
-    
-    id<XZWQuanTableClickDelegate>  delegate;
-    
-    
+@interface XZWQuanList : UIView <UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate> {
+	ASIHTTPRequest *resolveRequest;
+
+	NSMutableArray *zhiDaoArray;
+
+	BOOL isLoading;
+
+	BOOL isFinished;
+
+	int current;
+
+	NSMutableString *linkPreString;
+
+
+	EGORefreshTableHeaderView *refreshView;
+
+	UITableView *myTableView;
+
+	int totalPage;
+
+	UIViewController *ref;
+
+
+	id <XZWQuanTableClickDelegate> delegate;
 }
 
 
 
-@property (nonatomic, retain) id    delegate;
-@property (nonatomic, retain) EGORefreshTableHeaderView        *refreshTableView;
+@property (nonatomic, retain) id delegate;
+@property (nonatomic, retain) EGORefreshTableHeaderView *refreshTableView;
 
--(void)reloadFirst;
-- (id)initWithFrame:(CGRect)frame andLinkString:(NSString*)linkStringArg;
+- (void)reloadFirst;
+- (id)initWithFrame:(CGRect)frame andLinkString:(NSString *)linkStringArg;
 
 @end

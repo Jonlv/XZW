@@ -11,15 +11,15 @@
 @class XZWSelectAstroView;
 @protocol XZWSelectAstroViewDelegate <NSObject>
 
--(void)selectAstro:(XZWSelectAstroView*)astroView selectedAstro:(int) selectedAstro name:(NSString*)nameString;
+- (void)selectAstro:(XZWSelectAstroView *)astroView selectedAstro:(int)selectedAstro name:(NSString *)nameString;
 
 @end
 
 
 @interface XZWSelectAstroView : UIView
 
-@property (nonatomic,assign) id<XZWSelectAstroViewDelegate> delegate;
+@property (nonatomic, assign) id <XZWSelectAstroViewDelegate> delegate;
 
--(void)playAnimate;
+- (void)playAnimate;
 
 @end

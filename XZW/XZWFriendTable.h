@@ -16,46 +16,45 @@
 
 @optional
 
--(void)selectID:(int)userID;
+- (void)selectID:(int)userID;
 
 @end
 
 
-@interface XZWFriendTable : UIView<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate>{
-    
-    ASIHTTPRequest *resolveRequest;
-    
-    NSMutableArray *zhiDaoArray;
-    
-    BOOL isLoading;
-    
-    BOOL isFinished;
-    
-    int current;
-    
-    NSMutableString *linkPreString;
-    
-    
-    EGORefreshTableHeaderView *refreshView;
-    
-    UITableView *myTableView;
-    
-    int totalPage;
-    
-    UIViewController *ref;
-    
-    int sex;
-    
-    id<XZWFriendTableClickDelegate>  delegate;
+@interface XZWFriendTable : UIView <UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate> {
+	ASIHTTPRequest *resolveRequest;
+
+	NSMutableArray *zhiDaoArray;
+
+	BOOL isLoading;
+
+	BOOL isFinished;
+
+	int current;
+
+	NSMutableString *linkPreString;
+
+
+	EGORefreshTableHeaderView *refreshView;
+
+	UITableView *myTableView;
+
+	int totalPage;
+
+	UIViewController *ref;
+
+	int sex;
+
+	id <XZWFriendTableClickDelegate> delegate;
 }
 
 
-@property (nonatomic, retain) id    delegate;
-@property (nonatomic, retain) EGORefreshTableHeaderView        *refreshTableView;
+@property (nonatomic, retain) id delegate;
+@property (nonatomic, retain) EGORefreshTableHeaderView *refreshTableView;
 
 
--(void)reloadFirst;
--(void)setSexAndReload:(int)sexArg;
-- (id)initWithFrame:(CGRect)frame andLinkString:(NSString*)linkStringArg;
+- (void)reloadFirst;
+- (void)setSexAndReload:(int)sexArg;
+- (id)initWithFrame:(CGRect)frame andLinkString:(NSString *)linkStringArg;
 
 @end

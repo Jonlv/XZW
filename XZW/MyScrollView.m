@@ -1,4 +1,4 @@
- 
+
 #import "MyScrollView.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <SDWebImage/SDImageCache.h>
@@ -21,17 +21,16 @@
 		self.maximumZoomScale = 2.5;
 		self.showsVerticalScrollIndicator = NO;
 		self.showsHorizontalScrollIndicator = NO;
-		
+
 		imageView  = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
 		imageView.contentMode = UIViewContentModeScaleAspectFit;
-       
+
 		[self addSubview:imageView];
-        
-       // [self setImageWithUrl:urlString];
-       // UIActivityIndicatorView *activityView
-        
-        
+
+        [self setImageWithUrl:urlString];
+        // UIActivityIndicatorView *activityView
     }
+
     return self;
 }
 
@@ -40,62 +39,41 @@
 	imageView.image = img;
 }
 
--(void)setImageWithUrl:(NSString*)urlString{
-
-    [imageView   setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:nil     ];
+- (void)setImageWithUrl:(NSString*)urlString
+{
+    [imageView setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:nil];
 }
 
 #pragma mark -
 #pragma mark === UIScrollView Delegate ===
 #pragma mark -
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
-{	
-    
-    
+{
 	return imageView;
-}
-
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
-{ 
-	
-	CGFloat zs = scrollView.zoomScale;
-	zs = MAX(zs, 1.0);
-	zs = MIN(zs, 2.0);	
-	
-    
-    [self setZoomScale:zs animated:true];
-}
-
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView{
-    
-     
 }
 
 #pragma mark -
 #pragma mark === UITouch Delegate ===
 #pragma mark -
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{ 
-	
+{
 	UITouch *touch = [touches anyObject];
-	
-	if ([touch tapCount] == 2) 
-	{ 
+
+	if ([touch tapCount] == 2)
+	{
 		CGFloat zs = self.zoomScale;
 		zs = (zs == 1.0) ? 2.0 : 1.0;
 		[self setZoomScale:zs animated:true];
-        
- 
-	}else if ([touch tapCount] == 1) {
+
+	} else if ([touch tapCount] == 1) {
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:.3f];
-        
+
         UIView *bar = [[[self superview]  superview]  viewWithTag:1111];
-        
-       bar.alpha  = bar.alpha ==0 ?   1:  0;
-        
+
+        bar.alpha  = bar.alpha ==0 ?   1:  0;
+
         [UIView commitAnimations];
-        
     }
 }
 
@@ -106,7 +84,7 @@
 {
 	[image release];
 	[imageView release];
-	
+
     [super dealloc];
 }
 

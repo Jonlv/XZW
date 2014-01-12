@@ -16,47 +16,46 @@
 
 @optional
 
--(void)selectNearByID:(int)userID;
+- (void)selectNearByID:(int)userID;
 
 @end
 
 
-@interface XZWNearByFriendsView : UIView<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate>{
-    
-    ASIHTTPRequest *resolveRequest;
-    
-    NSMutableArray *zhiDaoArray;
-    
-    BOOL isLoading;
-    
-    BOOL isFinished;
-    
-    int current;
-    
-    NSMutableString *linkPreString;
-    
-    
-    EGORefreshTableHeaderView *refreshView;
-    
-    UITableView *myTableView;
-    
-    int totalPage;
-    
-    UIViewController *ref;
-    
-    int sex;
-    
-    id<XZWNearByFriendTableClickDelegate>  delegate;
+@interface XZWNearByFriendsView : UIView <UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate> {
+	ASIHTTPRequest *resolveRequest;
+
+	NSMutableArray *zhiDaoArray;
+
+	BOOL isLoading;
+
+	BOOL isFinished;
+
+	int current;
+
+	NSMutableString *linkPreString;
+
+
+	EGORefreshTableHeaderView *refreshView;
+
+	UITableView *myTableView;
+
+	int totalPage;
+
+	UIViewController *ref;
+
+	int sex;
+
+	id <XZWNearByFriendTableClickDelegate> delegate;
 }
 
 
-@property (nonatomic, retain) id    delegate;
-@property (nonatomic, retain) EGORefreshTableHeaderView        *refreshTableView;
+@property (nonatomic, retain) id delegate;
+@property (nonatomic, retain) EGORefreshTableHeaderView *refreshTableView;
 
 
--(void)reloadFirst;
--(void)setSexAndReload:(int)sexArg;
-- (id)initWithFrame:(CGRect)frame andLinkString:(NSString*)linkStringArg;
+- (void)reloadFirst;
+- (void)setSexAndReload:(int)sexArg;
+- (id)initWithFrame:(CGRect)frame andLinkString:(NSString *)linkStringArg;
 
 
 @end

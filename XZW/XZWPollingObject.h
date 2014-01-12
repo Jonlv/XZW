@@ -11,11 +11,10 @@
 
 @interface XZWPollingObject : NSObject{
 
-    BOOL    isDynPolling;
-    ASIHTTPRequest  *pollingRequest;
+    BOOL isDynPolling;
+    ASIHTTPRequest* pollingRequest;
     
 }
-
 
 -(void)getNewUnReadInstanly;
 

@@ -1,6 +1,6 @@
 //
 //  XZWMyFriendFeedView.h
-//  XZW
+//  “个人中--动态”中的“好友动态”或“我的动态”子标签
 //
 //  Created by dee on 13-10-22.
 //  Copyright (c) 2013年 xingzuowu. All rights reserved.
@@ -15,40 +15,39 @@
 
 @protocol MyFriendFeedViewDelegate <NSObject>
 
-
 -(void)clickMyFriendFeedIndex:(NSDictionary*)messageDic;
 
 @end
 
 
-@interface XZWMyFriendFeedView : UIView<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate>{
-    
-    
+@interface XZWMyFriendFeedView : UIView<UITableViewDataSource, UITableViewDelegate,EGORefreshTableHeaderDelegate> {
+
+
     ASIHTTPRequest *getFeedRequest;
-    
+
     NSMutableArray *myFeedArray;
-    
+
     BOOL isLoading;
-    
+
     BOOL isFinished;
-    
+
     int current;
-    
+
     NSMutableString *linkString;
-    
+
     EGORefreshTableHeaderView *refreshView;
-    
+
     UITableView *myTableView;
-    
+
     int totalPage;
-    
-    id   delegate;
+
+    id delegate;
 }
 
 
 
-@property (nonatomic, retain) id<MyFriendFeedViewDelegate>        delegate;
-@property (nonatomic, retain) EGORefreshTableHeaderView        *refreshTableView;
+@property (nonatomic, retain) id<MyFriendFeedViewDelegate> delegate;
+@property (nonatomic, retain) EGORefreshTableHeaderView* refreshTableView;
 
 - (id)initWithFrame:(CGRect)frame andLinkString:(NSString*)linkStringArg;
 
