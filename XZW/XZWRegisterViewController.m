@@ -14,11 +14,10 @@
 	UILabel *bornUL;
 	NSDate *birthDate;
 
-
 	XZWSelectDateView *normalSDV;
-
-
 	ASIHTTPRequest *registerRequest;
+
+    CGRect mOriginFrame;
 }
 
 @end
@@ -49,6 +48,10 @@
 	[self initView];
 
 	// Do any additional setup after loading the view.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    mOriginFrame = self.view.frame;
 }
 
 - (void)goBack {
@@ -300,7 +303,7 @@
 
 
 	[UIView animateWithDuration:.3f animations: ^{
-	    self.view.frame = CGRectMake(0, 0, 320, TotalScreenHeight);
+	    self.view.frame = mOriginFrame;
 	}];
 
 	[normalSDV playAnimate];
@@ -333,27 +336,27 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
 	if (textField == nicknameUTF) {
 		[UIView animateWithDuration:.3f animations: ^{
-		    self.view.frame = CGRectMake(0, 0, 320, TotalScreenHeight);
+		    self.view.frame = mOriginFrame;
 		}];
 	}
 	else if (textField == emailUTF) {
 		[UIView animateWithDuration:.3f animations: ^{
-		    self.view.frame = CGRectMake(0, -30, 320, TotalScreenHeight);
+		    self.view.frame = CGRectOffset(mOriginFrame, 0, -30);
 		}];
 	}
 	else if (textField == passwordUTF) {
 		[UIView animateWithDuration:.3f animations: ^{
-		    self.view.frame = CGRectMake(0, -70, 320, TotalScreenHeight);
+		    self.view.frame = CGRectOffset(mOriginFrame, 0, -70);
 		}];
 	}
 	else if (textField == repasswordUTF) {
 		[UIView animateWithDuration:.3f animations: ^{
-		    self.view.frame = CGRectMake(0, -130, 320, TotalScreenHeight);
+		    self.view.frame = CGRectOffset(mOriginFrame, 0, -130);
 		}];
 	}
 	else {
 		[UIView animateWithDuration:.3f animations: ^{
-		    self.view.frame = CGRectMake(0, 0, 320, TotalScreenHeight);
+		    self.view.frame = mOriginFrame;
 		}];
 	}
 }
@@ -362,7 +365,7 @@
 	[self.view endEditing:true];
 
 	[UIView animateWithDuration:.3f animations: ^{
-	    self.view.frame = CGRectMake(0, 0, 320, TotalScreenHeight);
+	    self.view.frame = mOriginFrame;
 	}];
 
 	return true;
@@ -370,7 +373,7 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	[UIView animateWithDuration:.3f animations: ^{
-	    self.view.frame = CGRectMake(0, 0, 320, TotalScreenHeight);
+	    self.view.frame = mOriginFrame;
 	}];
 	[self.view endEditing:true];
 }
