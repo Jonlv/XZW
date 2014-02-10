@@ -215,9 +215,9 @@
 	[self.view endEditing:true];
 
 
-	[UIView animateWithDuration:.3f animations: ^{
-	    self.view.frame = CGRectMake(0, 0, 320, TotalScreenHeight);
-	}];
+//	[UIView animateWithDuration:.3f animations: ^{
+//	    self.view.frame = CGRectMake(0, 0, 320, TotalScreenHeight);
+//	}];
 
 	[normalSDV playAnimate];
 }
