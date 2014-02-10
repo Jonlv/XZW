@@ -27,7 +27,9 @@
 
 @implementation XZWAppDelegate
 
-
++ (float)VERSION_CODE {
+    return VERSION_CODE;
+}
 
 #pragma mark - vc init
 
@@ -197,6 +199,9 @@
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
+    VERSION_CODE = [[[UIDevice currentDevice] systemVersion] floatValue];
+
 	self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 	// Override point for customization after application launch.
 	self.window.backgroundColor = [UIColor whiteColor];

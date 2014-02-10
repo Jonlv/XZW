@@ -8,11 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "IIViewDeckController.h"
+
+static float VERSION_CODE;
+
 @interface XZWAppDelegate : UIResponder <UIApplicationDelegate,IIViewDeckControllerDelegate>{
     
      
 }
 
 @property (strong, nonatomic) UIWindow *window;
+
++ (float)VERSION_CODE;
 
 @end

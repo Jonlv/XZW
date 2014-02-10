@@ -19,6 +19,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "XZWLoginViewController.h"
 #import "XZWTodayIssueViewController.h"
+#import "XZWAppDelegate.h"
 #import <AudioToolbox/AudioToolbox.h>
 
 @interface XZWMenuViewController ()
@@ -68,8 +69,10 @@
 - (void)initViews {
 	self.view.backgroundColor = [UIColor colorWithHex:0x4c4c4c];
 
+    int layoutOffset = (XZWAppDelegate.VERSION_CODE >= 7.0)?20:0;
+
 	//(start) 头像
-	avatarUIV = [[UIImageView alloc] initWithFrame:CGRectMake(15, 10, 30, 30)];
+	avatarUIV = [[UIImageView alloc] initWithFrame:CGRectMake(15, 10 + layoutOffset, 30, 30)];
 	[avatarUIV setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@", [[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"]]]];
 	avatarUIV.image = [UIImage imageNamed:@"personimg"];
 	[self.view addSubview:avatarUIV];
@@ -77,7 +80,7 @@
 
 
 	UIButton *selectButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	selectButton.frame = CGRectMake(0, 0, 140, 40);
+	selectButton.frame = CGRectMake(0, 0 + layoutOffset, 140, 40);
 	[selectButton addTarget:self action:@selector(editMyProfile) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:selectButton];
 	//(end) 头像
@@ -92,13 +95,13 @@
 
 
 	UIButton *homeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-	homeBtn.frame = CGRectMake(180, 18, 24, 20);
+	homeBtn.frame = CGRectMake(180, 18 + layoutOffset, 24, 20);
 	[homeBtn addTarget:self action:@selector(homeAction) forControlEvents:UIControlEventTouchUpInside];
 	[homeBtn setImage:[UIImage imageNamed:@"home"] forState:UIControlStateNormal];
 	[self.view addSubview:homeBtn];
 
 
-	usernameUL = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, 260, 50)];
+	usernameUL = [[UILabel alloc] initWithFrame:CGRectMake(60, 0 + layoutOffset, 260, 50)];
 	usernameUL.backgroundColor =  [UIColor clearColor];
 	usernameUL.textColor = [UIColor whiteColor];
 	usernameUL.font = [UIFont boldSystemFontOfSize:17];
@@ -106,7 +109,7 @@
 	[self.view addSubview:usernameUL];
 	[usernameUL release];
 
-	menuTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 50, 320, TotalScreenHeight - 70)];
+	menuTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 50 + layoutOffset, 320, TotalScreenHeight - 70)];
 	[menuTable setDelegate:self];
 	[menuTable setDataSource:self];
 	menuTable.backgroundColor =  [UIColor colorWithHex:0x4c4c4c];
@@ -114,7 +117,7 @@
 	[menuTable release];
 	menuTable.separatorStyle = UITableViewCellSeparatorStyleNone;
 
-	UIImageView *lineUIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 49, 320, 1)];
+	UIImageView *lineUIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 49 + layoutOffset, 320, 1)];
 	lineUIV.image = [UIImage imageNamed:@"table_line"];
 	[self.view addSubview:lineUIV];
 	[lineUIV release];
