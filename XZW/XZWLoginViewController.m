@@ -158,16 +158,16 @@
 		}
 	    else {
 	        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]) {
-	            //两次是不同 人删除
-	            if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"oldUserID"]   intValue] != [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]  intValue]) {
+	            //两次登录是不同的人
+	            if ([[[responceDic objectForKey:@"data"] objectForKey:@"uid"] intValue] != [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue]) {
 	                [XZWDBOperate removeAllRecords];
 				}
 
 
-	            [[NSUserDefaults standardUserDefaults] setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"oldUserID"];
+//	            [[NSUserDefaults standardUserDefaults] setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"oldUserID"];
 			}
 	        else {
-	            [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"uid"] forKey:@"oldUserID"];
+//	            [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"uid"] forKey:@"oldUserID"];
 
 
 	            [XZWDBOperate removeAllRecords];
