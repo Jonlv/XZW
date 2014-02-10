@@ -3158,6 +3158,11 @@
 				CLASSPREFIX = XZW;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = xingzuowu;
+				TargetAttributes = {
+					16214D4F17C2FC1000483E02 = {
+						DevelopmentTeam = VL3XVB73DH;
+					};
+				};
 			};
 			buildConfigurationList = 16214D4B17C2FC1000483E02 /* Build configuration list for PBXProject "XZW" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -3930,6 +3935,8 @@
 		16214D6E17C2FC1000483E02 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../Desktop/vendor\"",
@@ -3956,6 +3963,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -3963,6 +3971,8 @@
 		16214D6F17C2FC1000483E02 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../Desktop/vendor\"",
@@ -3989,6 +3999,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
