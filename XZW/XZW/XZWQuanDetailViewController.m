@@ -50,7 +50,8 @@
     
     
     ASIHTTPRequest *delineRequest,*acceptRequest;
-    
+    BOOL friendShouldRefresh;
+    BOOL issueShouldRefresh;
 }
 
 @end
@@ -100,7 +101,7 @@
     listButton.frame = CGRectMake(0, 0, 23, 20);
     [listButton addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
     [listButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
-     
+    
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]  initWithCustomView:listButton]   autorelease];
     
     
@@ -108,7 +109,7 @@
     listButton.frame = CGRectMake(0, 0, 21, 21);
     [listButton addTarget:self action:@selector(sendIssue) forControlEvents:UIControlEventTouchUpInside];
     [listButton setImage:[UIImage imageNamed:@"camera"] forState:UIControlStateNormal];
-     
+    
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]  initWithCustomView:listButton]   autorelease];
     
     
@@ -124,7 +125,7 @@
     XZWPublishIssueViewController *publishVC = [[XZWPublishIssueViewController alloc]  initWithQuanID:quanID];
     [self.navigationController pushViewController:publishVC animated:true];
     [publishVC release];
-         
+    
     
 }
 
@@ -154,7 +155,7 @@
     [sunButton  setTintColor:[UIColor grayColor]];
     [sunButton  setTitle:@"话题" forState:UIControlStateNormal];
     [self.view addSubview:sunButton];
-     
+    
     
     sunButton = [UIButton buttonWithType:UIButtonTypeCustom];
     sunButton.frame = CGRectMake(106.2, 0, 106.2, 44);
@@ -179,7 +180,7 @@
     [sunButton  setTitle:@"资料" forState:UIControlStateNormal];
     [self.view addSubview:sunButton];
     
-
+    
     
     //// quan info
     
@@ -190,13 +191,13 @@
     friendTable.delegate = self;
     [self.view addSubview:friendTable];
     [friendTable  release];
-
+    
     
     issueTableView = [[XZWQuanIssueView alloc]  initWithFrame:CGRectMake(0, 44, 320, TotalScreenHeight -108 ) andQuanID:quanID] ;
     issueTableView.delegate = self;
     [self.view addSubview:issueTableView];
     [issueTableView release];
-
+    
     
     
     quanInfo = [[UIView alloc]   initWithFrame:CGRectMake(0, 44, 320, TotalScreenHeight -108 )];
@@ -225,8 +226,8 @@
     [bottomUIV release];
     
     
-        
-
+    
+    
     
     
     
@@ -235,15 +236,15 @@
     UIView *backgroundView = [[[UIView alloc]  initWithFrame:quanInfoUTV.bounds]  autorelease];
     backgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
     quanInfoUTV.backgroundView = backgroundView;
-        
+    
     //
     
-      
     
     
-      
     
-     
+    
+    
+    
     quanInfoRequest = [XZWNetworkManager asiWithLink:[XZWQuanZiInfo  stringByAppendingFormat:@"&gid=%d",quanID] postDic:nil completionBlock:^{
         
         NSDictionary *backDic = [[quanInfoRequest responseString]  objectFromJSONString];
@@ -251,7 +252,7 @@
         
         if ([[backDic  objectForKey:@"status"] intValue] == 1   ) {
             
-             
+            
             
             [infoDic   setDictionary:[backDic objectForKey:@"data"]];
             
@@ -313,23 +314,13 @@
                 [profileButton setImage:[UIImage imageNamed:@"jiaru"] forState:UIControlStateNormal];
             }
             
-             
-            
-            
-            
             [quanInfoUTV  reloadData];
-            
-        }
-        
-        
-        
-        
-        
-        
-        ;} failedBlock:nil];
+            friendShouldRefresh = YES;
+            issueShouldRefresh = YES;
+        };} failedBlock:nil];
     
     
-  
+    
     
     arrowView = [[UIView alloc]  initWithFrame:CGRectMake(0, 35, 100, 10)];
     [self.view  addSubview:arrowView];
@@ -357,7 +348,7 @@
     [self.view addSubview:mbProgessHud];
     [mbProgessHud release];
     
-       
+    
 }
 
 
@@ -384,7 +375,7 @@
             
             isLike = !isLike;
             
-         
+            
             
             if (isLike) {
                 
@@ -448,17 +439,17 @@
             
             isMember = !isMember;
             
-//            if(isMember){
-//                
-//                
-//                hud.labelText = @"加入成功";
-//                
-//            }else {
-//                
-//                hud.labelText = @"退出成功";
-//                
-//            }
-//            
+            //            if(isMember){
+            //
+            //
+            //                hud.labelText = @"加入成功";
+            //
+            //            }else {
+            //
+            //                hud.labelText = @"退出成功";
+            //
+            //            }
+            //
             
             
             
@@ -477,8 +468,9 @@
                 
                 [sender setImage:[UIImage imageNamed:@"jiaru"] forState:UIControlStateNormal];
             }
-            
-            
+            friendShouldRefresh = YES;
+            issueShouldRefresh = YES;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUpdateMyQuan object:nil];
             
             
             
@@ -490,7 +482,7 @@
             hud.labelText = [[[leaveRequest responseString]  objectFromJSONString][@"info"]   description ];
         }
         
-                    
+        
         
         [hud  hide:true afterDelay:.8f];
         
@@ -503,7 +495,7 @@
             
             ;}];
     
-
+    
     
     
 }
@@ -511,7 +503,10 @@
 
 -(void)myIssue{
     
-    
+    if (issueShouldRefresh) {
+        [issueTableView loadFirst];
+        issueShouldRefresh = NO;
+    }
     [UIView animateWithDuration:.3f animations:^{ arrowView.frame =  CGRectMake(0, 35, 100, 10) ;}];
     
     [self.view bringSubviewToFront:issueTableView];
@@ -524,7 +519,10 @@
 
 -(void)member{
     
-    
+    if (friendShouldRefresh) {
+        [friendTable reloadFirst];
+        friendShouldRefresh = NO;
+    }
     [UIView animateWithDuration:.3f animations:^{ arrowView.frame =  CGRectMake(110, 35, 100, 10) ;}];
     
     [self.view bringSubviewToFront:friendTable];
@@ -537,7 +535,7 @@
 -(void)info{
     
     [UIView animateWithDuration:.3f animations:^{ arrowView.frame =  CGRectMake(220, 35, 100, 10) ;}];
- 
+    
     [self.view bringSubviewToFront:quanInfo];
     
     MBProgressHUD *hud =  (MBProgressHUD *) [self.view viewWithTag:kMBProgessHud];
@@ -546,7 +544,7 @@
 }
 
 
-#pragma mark - 
+#pragma mark -
 
 
 
@@ -580,7 +578,7 @@
     }
     
     
- 
+    
     return height ;
 }
 
@@ -641,7 +639,7 @@
             
         }
             break;
-           
+            
         case 1:
         {
             
@@ -695,7 +693,7 @@
                 rightUL.frame = CGRectMake(290 - CGRectGetWidth(rightUL.frame), 10, CGRectGetWidth(rightUL.frame), CGRectGetHeight(rightUL.frame));
                 
             }
-
+            
         }
             break;
         case 6:
@@ -713,7 +711,7 @@
         }
             break;
     }
- 
+    
     
     
     return cell;
@@ -729,22 +727,22 @@
     GoodsGalleryViewController *ggvc = [[GoodsGalleryViewController alloc]  initWithPhotoArray:indexArray page:0];
     [self.navigationController presentModalViewController:ggvc animated:true];
     [ggvc release];
-
+    
 }
 
 
 -(void)acceptDic:(NSDictionary*)acceptDic{
-     
+    
     
     
     acceptRequest = [XZWNetworkManager  asiWithLink:[XZWManageQuanZi   stringByAppendingFormat:@"&gid=%@&uid=%@&op=%@",acceptDic[@"gid"],acceptDic[@"uid"],acceptDic[@"op"]] postDic:nil completionBlock:^{
-    
-     
+        
+        
         NSDictionary *responseDic  = [[acceptRequest responseString]   objectFromJSONString];
         
         if ([responseDic[@"status"]   intValue] == 1 ) {
             
-          
+            
             [friendTable  acceptFinish:[acceptDic[@"uid"]   intValue]];
             
             
@@ -758,13 +756,13 @@
         
         
         
-    
-    
+        
+        
     } failedBlock:^{
-    
+        
         
         [friendTable  acceptFail:@"加载失败"];
-    
+        
     }];
     
     
@@ -808,7 +806,7 @@
 
 
 -(void)setNewCount:(int)count{
-         
+    
     [newMemberView setBadgeString:[NSString stringWithFormat:@"%d",count]];
     
 }

@@ -253,6 +253,7 @@
 
 	[resolveRequest setCompletionBlock: ^{
 	    // Use when fetching binary data
+        NSLog(@"request: %@ , response: %@", [resolveRequest url],[[resolveRequest responseData]   objectFromJSONData]);
 	    NSData *responseData = [resolveRequest responseData];
 
 
@@ -281,6 +282,7 @@
 	        [footerView addSubview:uaiv];
 	        [uaiv release];
 	        [uaiv startAnimating];
+            [myTableView.tableFooterView setHidden:true];
 		}
 
 	    [zhiDaoArray setArray:[[[responseData   objectFromJSONData] objectForKey:@"data"] objectForKey:@"data"]];
