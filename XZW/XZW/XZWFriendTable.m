@@ -52,6 +52,7 @@
 		isLoading = true;
 
 		[resolveRequest setCompletionBlock: ^{
+            NSLog(@"request: %@ , response: %@", [resolveRequest url],[[resolveRequest responseData]   objectFromJSONData]);
 		    myTableView = [[UITableView alloc] initWithFrame:self.bounds];
 		    [self addSubview:myTableView];
 		    myTableView.backgroundColor = [UIColor clearColor];

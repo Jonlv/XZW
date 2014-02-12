@@ -27,6 +27,7 @@
 	XZWQuanList *recommandQuanList;
 
 	XZWQuanFeedView *quanFeedView;
+    BOOL shouldUpdateQuanList;
 }
 
 @end
@@ -54,6 +55,15 @@
 	self.viewDeckController.panningMode = IIViewDeckNoPanning;
 
 	[super viewWillDisappear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    if (shouldUpdateQuanList) {
+        [quanList reloadFirst];
+        shouldUpdateQuanList = NO;
+    }
+    [super viewDidAppear:animated];
 }
 
 #pragma mark -
@@ -95,8 +105,14 @@
 
 
 	[self initView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMyQuan) name:kNotificationUpdateMyQuan object:nil];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [super dealloc];
+}
 #pragma mark -
 
 - (void)addQuan {
@@ -192,6 +208,10 @@
 }
 
 - (void)myQuan {
+    if (shouldUpdateQuanList) {
+        [quanList reloadFirst];
+        shouldUpdateQuanList = NO;
+    }
 	[UIView animateWithDuration:.3f animations: ^{ arrowView.frame =  CGRectMake(0, 35, 100, 10); }];
 
 	[self.view bringSubviewToFront:quanList];
@@ -224,4 +244,8 @@
 	// Dispose of any resources that can be recreated.
 }
 
+- (void)updateMyQuan
+{
+    shouldUpdateQuanList = YES;
+}
 @end

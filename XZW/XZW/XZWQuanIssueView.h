@@ -85,6 +85,6 @@
 @property (nonatomic, retain) EGORefreshTableHeaderView        *refreshTableView;
 
 - (id)initWithFrame:(CGRect)frame andQuanID:(int)theQuanID;
-
+- (void)loadFirst;
 
 @end
