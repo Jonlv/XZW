@@ -146,67 +146,82 @@
 }
 
 - (void)loginAction {
-	loginRequest = [XZWNetworkManager asiWithLink:XZWLogin postDic:[NSDictionary dictionaryWithObjectsAndKeys:emailUTF.text, @"login_email", passwordUTF.text, @"login_password", @"1", @"login_remember", nil] completionBlock: ^{
-	    NSDictionary *responceDic = [[loginRequest responseString]   objectFromJSONString];
+
+    if (emailUTF.text.length > 0 && passwordUTF.text.length > 0) {
+        loginRequest = [XZWNetworkManager asiWithLink:XZWLogin postDic:[NSDictionary dictionaryWithObjectsAndKeys:emailUTF.text, @"login_email", passwordUTF.text, @"login_password", @"1", @"login_remember", nil] completionBlock: ^{
+            NSDictionary *responceDic = [[loginRequest responseString]   objectFromJSONString];
 
 
 
-	    //    [self goBack];
+            //    [self goBack];
 
-	    if ([[responceDic objectForKey:@"status"]   intValue] == 0) {
-	        [[[[UIAlertView alloc] initWithTitle:nil message:[responceDic objectForKey:@"info"] delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil]  autorelease]  show];
-		}
-	    else {
-	        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]) {
-	            //两次登录是不同的人
-	            if ([[[responceDic objectForKey:@"data"] objectForKey:@"uid"] intValue] != [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue]) {
-	                [XZWDBOperate removeAllRecords];
-				}
-
-
-//	            [[NSUserDefaults standardUserDefaults] setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"oldUserID"];
-			}
-	        else {
-//	            [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"uid"] forKey:@"oldUserID"];
+            if ([[responceDic objectForKey:@"status"]   intValue] == 0) {
+                [[[[UIAlertView alloc] initWithTitle:nil message:[responceDic objectForKey:@"info"] delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil]  autorelease]  show];
+            }
+            else {
+                if ([[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]) {
+                    //两次登录是不同的人
+                    if ([[[responceDic objectForKey:@"data"] objectForKey:@"uid"] intValue] != [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue]) {
+                        [XZWDBOperate removeAllRecords];
+                    }
 
 
-	            [XZWDBOperate removeAllRecords];
-			}
+                    //	            [[NSUserDefaults standardUserDefaults] setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"oldUserID"];
+                }
+                else {
+                    //	            [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"uid"] forKey:@"oldUserID"];
 
 
-	        [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"uid"] forKey:@"userID"];
+                    [XZWDBOperate removeAllRecords];
+                }
 
 
-	        [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"uname"] forKey:@"username"];
-
-	        [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"avatar"] forKey:@"avatar"];
-
-	        [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"constellation"] forKey:@"constellation"];
+                [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"uid"] forKey:@"userID"];
 
 
+                [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"uname"] forKey:@"username"];
 
+                [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"avatar"] forKey:@"avatar"];
 
-	        [[NSUserDefaults standardUserDefaults]  synchronize];
+                [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"constellation"] forKey:@"constellation"];
 
 
 
 
-	        [[NSNotificationCenter defaultCenter] postNotificationName:XZWLoginNotification object:nil];
+                [[NSUserDefaults standardUserDefaults]  synchronize];
 
-	        UIAlertView *dismissUAV = [[[UIAlertView alloc] initWithTitle:nil message:[responceDic objectForKey:@"info"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil]  autorelease];
-	        [dismissUAV   show];
 
-	        double delayInSeconds = 0.4f;
-	        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-	        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-	            if (dismissUAV) {
-	                [dismissUAV dismissWithClickedButtonIndex:0 animated:true];
-				}
 
-	            [self goBack];
-			});
-		}
-	} failedBlock:nil];
+
+                [[NSNotificationCenter defaultCenter] postNotificationName:XZWLoginNotification object:nil];
+
+                UIAlertView *dismissUAV = [[[UIAlertView alloc] initWithTitle:nil message:[responceDic objectForKey:@"info"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil]  autorelease];
+                [dismissUAV   show];
+                
+                double delayInSeconds = 0.4f;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                    if (dismissUAV) {
+                        [dismissUAV dismissWithClickedButtonIndex:0 animated:true];
+                    }
+                    
+                    [self goBack];
+                });
+            }
+        } failedBlock:^{
+            UIAlertView* dialog = [[UIAlertView alloc] initWithTitle:nil message:@"网络异常，请确认网络连接正常后再试" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [dialog show];
+        }];
+    } else {
+        NSString* message;
+        if (emailUTF.text.length == 0) {
+            message = @"邮箱或ID不能为空";
+        } else {
+            message = @"密码不能为空";
+        }
+        UIAlertView* dialog = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [dialog show];
+    }
 }
 
 - (void)dealloc {
