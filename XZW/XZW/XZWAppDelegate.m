@@ -164,7 +164,7 @@
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-#pragma mark -
+#pragma mark - sdk
 
 
 - (void)initShareSDK {
