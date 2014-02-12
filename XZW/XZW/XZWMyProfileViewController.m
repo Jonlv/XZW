@@ -159,6 +159,7 @@
 
 
     [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(modifyDic:) name:XZWRefreshProfileNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumDeleted:) name:XZWNotification_AlbumDeleteSuccessfully object:nil];
 
     profileDic = [[NSMutableDictionary alloc]   init];
 
@@ -582,6 +583,10 @@
 
 
         ;} failedBlock:nil];
+}
+
+- (void)albumDeleted:(NSNotification*)notification {
+    [self loadAblum];
 }
 
 #pragma mark -
@@ -1370,7 +1375,7 @@
 
     if (sender.buttonTag == 3) {
 
-        XZWAblumViewController *avc = [[XZWAblumViewController alloc]  initWithArray:ablumArray andUserID:userID];
+        XZWAblumViewController *avc = [[XZWAblumViewController alloc]  initWithUserID:userID];
         [self.navigationController pushViewController:avc animated:true];
         [avc release];
 
@@ -1584,6 +1589,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
+#define AlbumCell_NoPictureTip 363
+
     // 相册
     if (indexPath.section == 1 ) {
 
@@ -1599,7 +1606,7 @@
             cell.accessoryType = UITableViewCellAccessoryNone ;
 
             UILabel *tipsUL = [[UILabel alloc]  initWithFrame:CGRectMake(0, 0, 300, 76)];
-            tipsUL.tag = 363;
+            tipsUL.tag = AlbumCell_NoPictureTip;
             tipsUL.textAlignment = UITextAlignmentCenter;
             tipsUL.text = @"该用户还未上传照片";
             tipsUL.textColor = [UIColor grayColor];
@@ -1635,11 +1642,11 @@
 
         if ([ablumArray  count]  ==  0 ) {
 
-            [cell.contentView viewWithTag:363].hidden = false;
+            [cell.contentView viewWithTag:AlbumCell_NoPictureTip].hidden = false;
 
         } else {
 
-            [cell.contentView viewWithTag:363].hidden = true;
+            [cell.contentView viewWithTag:AlbumCell_NoPictureTip].hidden = true;
         }
 
         for (int i = 0 ; i < 4 ; i++) {
