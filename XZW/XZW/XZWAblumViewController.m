@@ -52,7 +52,7 @@
     return self;
 }
 
-- (id)initWithArray:(NSArray*)thePicArray andUserID:(int)theUserID
+- (id)initWithUserID:(int)theUserID
 {
     self = [super init];
     if (self) {
@@ -297,6 +297,8 @@
         hud.labelText = responseDic[@"info"];
         [hud hide:true afterDelay:.8f];
 
+        [[NSNotificationCenter defaultCenter] postNotificationName:XZWNotification_AlbumDeleteSuccessfully object:self];
+
     } failedBlock:^{
 
         hud.labelText = @"删除失败...";
@@ -439,6 +441,7 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MyCustomCellIdentifier] autorelease];
 
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.backgroundColor = [UIColor clearColor];
 
 
         for (int i = 0 ; i < 4; i++) {

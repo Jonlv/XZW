@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#define XZWNotification_AlbumDeleteSuccessfully @"notification_albumDeleteSuccessfully"
+
 @interface XZWAblumViewController : UIViewController
 
-- (id)initWithArray:(NSArray*)thePicArray andUserID:(int)theUserID;
+- (id)initWithUserID:(int)theUserID;
 
 @end
