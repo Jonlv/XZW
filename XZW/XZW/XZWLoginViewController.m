@@ -162,7 +162,7 @@
                 if ([[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]) {
                     //两次登录是不同的人
                     if ([[[responceDic objectForKey:@"data"] objectForKey:@"uid"] intValue] != [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue]) {
-                        [XZWDBOperate removeAllRecords];
+                        //[XZWDBOperate removeAllRecords];
                     }
 
 
@@ -172,7 +172,7 @@
                     //	            [[NSUserDefaults standardUserDefaults] setObject:[[responceDic objectForKey:@"data"] objectForKey:@"uid"] forKey:@"oldUserID"];
 
 
-                    [XZWDBOperate removeAllRecords];
+                    //[XZWDBOperate removeAllRecords];
                 }
 
 

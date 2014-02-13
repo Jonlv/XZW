@@ -225,7 +225,7 @@
 		    if ([chatArray count] == 0) {
 		        [self getChat];
 
-		        [self getFriendChat];
+		        //[self getFriendChat];
 		        // [self performSelector:@selector(getFriendChat) withObject:nil afterDelay:10.f];
 			}
 		    else {
@@ -244,7 +244,7 @@
 
 		        // [self performSelector:@selector(getFriendChat) withObject:nil afterDelay:10.f];
 
-		        [self getFriendChat];
+		        //[self getFriendChat];
 			}
 		    else {
 		        [chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[chatArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:false];
@@ -407,7 +407,6 @@
 }
 
 - (void)getChat {
-	return;
 
 	NSString *getChatString = nil;
 
@@ -425,18 +424,23 @@
 
 	getChatRequest = [XZWNetworkManager asiWithLink:getChatString postDic:nil completionBlock: ^{
 	    NSLog(@"chat %@", [XZWLoadSiXin stringByAppendingFormat:@"&list_id=%d&isPoll=0", listID]);
-
+        NSLog(@"request: %@ , response: %@", [getChatRequest url],[[getChatRequest responseData]   objectFromJSONData]);
 	    NSDictionary *tempDic = [[getChatRequest responseString]   objectFromJSONString];
 
 
 
 
 	    if ([tempDic[@"status"]  intValue] == 1) {
-	        [chatArray addObjectsFromArray:tempDic[@"data"]];
+            NSArray *xinArray = tempDic[@"data"][@"data"];
+	        [chatArray addObjectsFromArray:xinArray];
+            
 	        [chatTableView reloadData];
 
-
-	        [XZWDBOperate insertDataFrom:tempDic[@"data"] andUserID:userID];
+            [xinArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [XZWDBOperate mainInsertDataFrom:obj andUserID:userID];
+            }];
+            
+	        //[XZWDBOperate insertDataFrom:tempDic[@"data"][@"data"] andUserID:userID];
 
 	        if ([chatArray  count] > 1) {
 	            [chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[chatArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:false];
@@ -445,22 +449,25 @@
 
 	        ////
 
-
-	        if ([tempDic[@"data"] count] > 0) {
-	            NSArray *xinArray = tempDic[@"data"];
-
-
-
+            NSMutableString *msgIds = [NSMutableString string];
+	        if ([tempDic[@"data"][@"data"] count] > 0) {
+	            NSArray *xinArray = tempDic[@"data"][@"data"];
 	            for (NSDictionary *xinDic in xinArray) {
+                    if ([xinDic[@"have_read"] intValue] == 0) {
+                        [msgIds appendFormat:@"%@,", xinDic[@"message_id"]];
+                    }
 				}
 			}
-
-
-	        [XZWNetworkManager asiWithLink:XZWSetSiXinRead postDic:@{ @"message_ids": @"" } completionBlock: ^{} failedBlock: ^{}];
+            if (msgIds.length > 0) {
+	            [msgIds deleteCharactersInRange:NSMakeRange(msgIds.length - 1, 1)];
+                [XZWNetworkManager asiWithLink:[XZWSetSiXinRead stringByAppendingFormat:@"&uid=%d&message_ids=%@", userID, msgIds] postDic:nil completionBlock: ^{} failedBlock: ^{}];
+            }
 		}
 	    else {
 		}
+        [self getFriendChat];
 	} failedBlock: ^{
+        [self getFriendChat];
 	}];
 }
 
