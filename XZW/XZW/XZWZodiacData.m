@@ -33,6 +33,7 @@
 	int z = (l - [XZWZodiacData mod:l y:30]) / 30;
 
 
+    NSLog(@"---- %d", z);
 	return [[XZWZodiacData getSignArray] objectAtIndex:z];
 }
 

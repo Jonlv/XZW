@@ -246,7 +246,7 @@
 	[queue inDatabase: ^(FMDatabase *db) {
 	    NSString *dbString = nil;
 
-	    dbString = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (ID integer  AUTOINCREMENT PRIMARY KEY,name text, year text, month text, day text, hour text, minute text, daylight text, timezone text, longitude text, latitude text, am text, sml text,birthday text,locString text,timezoneString text)", UserTable];
+	    dbString = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (ID integer PRIMARY KEY AUTOINCREMENT, name text, year text, month text, day text, hour text, minute text, daylight text, timezone text, longitude text, latitude text, am text, sml text,birthday text,locString text,timezoneString text)", UserTable];
 
 	    [db executeUpdate:dbString];
 
