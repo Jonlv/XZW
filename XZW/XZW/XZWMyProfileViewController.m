@@ -88,7 +88,7 @@
     BOOL isNotSelf,notFromLeft;
 
     UIButton * avatarUIV;
-
+    BOOL shouldRefresh;
 }
 
 
@@ -138,6 +138,15 @@
     [profileDic release];
 
     [super dealloc];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (shouldRefresh) {
+        shouldRefresh = NO;
+        [self requestGifts];
+    }
 }
 
 - (void)viewDidLoad
@@ -212,29 +221,7 @@
 
             }
 
-
-
-            giftRequest = [XZWNetworkManager asiWithLink:[XZWGiftBox   stringByAppendingFormat:@"&uid=%d&box=receive",userID] postDic:nil completionBlock:^{
-
-                NSDictionary *responseDic = [[giftRequest   responseString]  objectFromJSONString];
-
-
-                if ([[responseDic  objectForKey:@"status"]  intValue] == 0) {
-
-
-                }else {
-
-                    [giftArray    setArray:[[responseDic   objectForKey:@"data"]  objectForKey:@"data"]];
-
-                    [profileTableView reloadData];
-                }
-
-
-            } failedBlock:^{
-
-            }];
-
-
+            [self requestGifts];
             [self initView];
         }
 
@@ -1329,7 +1316,7 @@
 
 -(void)sendGift{
 
-
+    shouldRefresh = YES;
     XZWGiftListViewController *giftVC = [[XZWGiftListViewController alloc]  initWithName:[profileDic  objectForKey:@"uname"] andUser:[[profileDic  objectForKey:@"uid"]  intValue]];
     [self.navigationController pushViewController:giftVC animated:true];
     [giftVC release];
@@ -2324,4 +2311,30 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)requestGifts
+{
+    if (giftRequest) {
+        [giftRequest cancel];
+        giftRequest = nil;
+    }
+    giftRequest = [XZWNetworkManager asiWithLink:[XZWGiftBox   stringByAppendingFormat:@"&uid=%d&box=receive",userID] postDic:nil completionBlock:^{
+        
+        NSDictionary *responseDic = [[giftRequest   responseString]  objectFromJSONString];
+        
+        
+        if ([[responseDic  objectForKey:@"status"]  intValue] == 0) {
+            
+            
+        }else {
+            
+            [giftArray    setArray:[[responseDic   objectForKey:@"data"]  objectForKey:@"data"]];
+            
+            [profileTableView reloadData];
+        }
+        giftRequest = nil;
+        
+    } failedBlock:^{
+        giftRequest = nil;
+    }];
+}
 @end
