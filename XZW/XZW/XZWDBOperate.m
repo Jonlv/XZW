@@ -646,15 +646,15 @@
 	NSMutableArray *tempArray = [NSMutableArray array];
 
 	FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:[XZWUtil getDataBase]];
-
+    int currentUserID = [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue];
 	[queue inDatabase: ^(FMDatabase *db) {
 	    NSString *sql = [NSString stringWithFormat:
 	                     @"SELECT * FROM (select *  from  %@ where  list_id = %d  or (from_uid = %d and toid = %d ) or (from_uid = %d and toid = %d )  order by mtime desc limit 20)    order by  mtime asc  ",
 	                     MSGTable,
 	                     chatID,
 	                     userID,
-	                     [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue],
-	                     [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue],
+	                     currentUserID,
+	                     currentUserID,
 	                     userID];
 
 
@@ -665,7 +665,7 @@
 	        int from_uid = [rs intForColumn:@"from_uid"];
 	        NSString *content = [rs stringForColumn:@"content"];
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
-	        int me = [rs intForColumn:@"me"];
+	        int me = (from_uid == currentUserID) ? 1 : 0;
 
 	        [tempArray addObject:@{ @"message_id":  [NSNumber numberWithInt:message_id], @"list_id":[NSNumber numberWithInt:Id], @"from_uid":[NSNumber numberWithInt:from_uid], @"content":content, @"mtime":mtime, @"me":[NSNumber numberWithInt:me] }];
 		}
@@ -823,10 +823,10 @@
 	NSMutableArray *tempArray = [NSMutableArray array];
 
 	FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:[XZWUtil getDataBase]];
-
+    int currentUserID = [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue];
 	[queue inDatabase: ^(FMDatabase *db) {
 	    NSString *sql = [NSString stringWithFormat:
-	                     @"SELECT * FROM (select *  from  %@ where    (from_uid = %d and toid = %d ) or (from_uid = %d and toid = %d )  and mtime < %ld order by mtime desc limit 20)    order by  mtime asc  ", MSGTable, userID, [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue], [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue], userID, time];
+	                     @"SELECT * FROM (select *  from  %@ where    (from_uid = %d and toid = %d ) or (from_uid = %d and toid = %d )  and mtime < %ld order by mtime desc limit 20)    order by  mtime asc  ", MSGTable, userID, currentUserID, currentUserID, userID, time];
 
 
 	    FMResultSet *rs = [db executeQuery:sql];
@@ -834,7 +834,7 @@
 	        int Id = [rs intForColumn:@"list_id"];
 	        int message_id   = [rs intForColumn:@"message_id"];
 	        int from_uid = [rs intForColumn:@"from_uid"];
-	        int me = [rs intForColumn:@"me"];
+	        int me = (userID == currentUserID) ? 1 : 0;
 
 	        NSString *content = [rs stringForColumn:@"content"];
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
@@ -856,14 +856,14 @@
 	NSMutableArray *tempArray = [NSMutableArray array];
 
 	FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:[XZWUtil getDataBase]];
-
+    int currentUserID = [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue];
 	[queue inDatabase: ^(FMDatabase *db) {
 	    NSString *sql = [NSString stringWithFormat:
 	                     @"SELECT * FROM (select *  from  %@ where   (from_uid = %d and toid = %d ) or (from_uid = %d and toid = %d )   order by mtime desc limit 20)    order by  mtime asc  ",
 	                     MSGTable,
 	                     userID,
-	                     [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue],
-	                     [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue],
+	                     currentUserID,
+                         currentUserID,
 	                     userID];
 
 	    NSLog(@"sql %@", sql);
@@ -875,7 +875,7 @@
 	        int from_uid = [rs intForColumn:@"from_uid"];
 	        NSString *content = [rs stringForColumn:@"content"];
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
-	        int me = [rs intForColumn:@"me"];
+	        int me = (userID == currentUserID) ? 1 : 0;
 
 	        [tempArray addObject:@{ @"message_id":  [NSNumber numberWithInt:message_id], @"list_id":[NSNumber numberWithInt:Id], @"from_uid":[NSNumber numberWithInt:from_uid], @"content":content, @"mtime":mtime, @"me":[NSNumber numberWithInt:me] }];
 		}
