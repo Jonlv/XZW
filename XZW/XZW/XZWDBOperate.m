@@ -438,7 +438,7 @@
 // 插入
 + (BOOL)mainInsertDataFrom:(NSDictionary *)tempDic andUserID:(int)userID {
 	FMDatabase *db = [FMDatabase databaseWithPath:[XZWUtil getDataBase]];
-
+    
 	BOOL res = [db open];
 
 	if (res == NO) {
@@ -482,7 +482,7 @@
 		int me = tempDic[@"me"] ? 1 : 0;
 
 
-		NSString *dbString = [NSString stringWithFormat:@"insert into %@ (list_id , message_id , from_uid , content , mtime, me ,toid ) values (%@,%d,%@,'%@','%@', %d ,%d)  ;", MSGTable, tempDic[@"list_id"], [tempDic[@"message_id"]  intValue], tempDic[@"from_uid"], tempDic[@"content"], tempDic[@"mtime"], me, theUserID];
+		NSString *dbString = [NSString stringWithFormat:@"insert into %@ (list_id , message_id , from_uid , content , mtime, me ,toid ) values (%@,%d,%@,'%@','%@', %d ,%d)  ;", MSGTable, tempDic[@"list_id"], [tempDic[@"message_id"]  intValue], tempDic[@"from_uid"], [self base64EncodeString:tempDic[@"content"]], tempDic[@"mtime"], me, theUserID];
 
 
 
@@ -517,7 +517,7 @@
 
 	        int me = tempDic[@"me"] ? 1 : 0;
 
-	        NSString *dbString = [NSString stringWithFormat:@"insert into %@ (list_id , message_id , from_uid , content , mtime, me ,toid ) values (%@,%d,%@,'%@','%@', %d ,%d)  ;", MSGTable, tempDic[@"list_id"], [tempDic[@"message_id"]  intValue], tempDic[@"from_uid"], tempDic[@"content"], tempDic[@"mtime"], me, theUserID];
+	        NSString *dbString = [NSString stringWithFormat:@"insert into %@ (list_id , message_id , from_uid , content , mtime, me ,toid ) values (%@,%d,%@,'%@','%@', %d ,%d)  ;", MSGTable, tempDic[@"list_id"], [tempDic[@"message_id"]  intValue], tempDic[@"from_uid"], [self base64EncodeString:tempDic[@"content"]], tempDic[@"mtime"], me, theUserID];
 
 
 	        [db executeUpdate:dbString];
@@ -530,7 +530,7 @@
 
 	[queue inDatabase: ^(FMDatabase *db) {
 	    for (NSDictionary * tempDic in dataArray) {
-	        NSString *dbString = [NSString stringWithFormat:@"insert into %@(list_id , message_id , from_uid , content , mtime, me  ) values (%@,%d,%@,'%@','%@', %d);", MSGTable, tempDic[@"list_id"], [tempDic[@"message_id"]  intValue], tempDic[@"from_uid"], tempDic[@"content"], tempDic[@"mtime"], [tempDic[@"me"] intValue]];
+	        NSString *dbString = [NSString stringWithFormat:@"insert into %@(list_id , message_id , from_uid , content , mtime, me  ) values (%@,%d,%@,'%@','%@', %d);", MSGTable, tempDic[@"list_id"], [tempDic[@"message_id"]  intValue], tempDic[@"from_uid"], [self base64EncodeString:tempDic[@"content"]], tempDic[@"mtime"], [tempDic[@"me"] intValue]];
 
 
 
@@ -560,7 +560,7 @@
 	        int from_uid = [rs intForColumn:@"from_uid"];
 	        int me = [rs intForColumn:@"me"];
 
-	        NSString *content = [rs stringForColumn:@"content"];
+	        NSString *content = [self base64DecodeString:[rs stringForColumn:@"content"]];
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
 
 	        [tempArray addObject:@{ @"message_id":  [NSNumber numberWithInt:message_id], @"list_id":[NSNumber numberWithInt:Id], @"from_uid":[NSNumber numberWithInt:from_uid], @"content":content, @"mtime":mtime, @"me":[NSNumber numberWithInt:me] }];
@@ -593,7 +593,7 @@
 	        int from_uid = [rs intForColumn:@"from_uid"];
 	        int me = [rs intForColumn:@"me"];
 
-	        NSString *content = [rs stringForColumn:@"content"];
+	        NSString *content = [self base64DecodeString:[rs stringForColumn:@"content"]];
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
 
 	        [tempArray addObject:@{ @"message_id":  [NSNumber numberWithInt:message_id], @"list_id":[NSNumber numberWithInt:Id], @"from_uid":[NSNumber numberWithInt:from_uid], @"content":content, @"mtime":mtime, @"me":[NSNumber numberWithInt:me] }];
@@ -624,7 +624,7 @@
 	        int Id = [rs intForColumn:@"list_id"];
 	        int message_id   = [rs intForColumn:@"message_id"];
 	        int from_uid = [rs intForColumn:@"from_uid"];
-	        NSString *content = [rs stringForColumn:@"content"];
+	        NSString *content = [self base64DecodeString:[rs stringForColumn:@"content"]];
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
 	        int me = [rs intForColumn:@"me"];
 
@@ -663,7 +663,10 @@
 	        int Id = [rs intForColumn:@"list_id"];
 	        int message_id   = [rs intForColumn:@"message_id"];
 	        int from_uid = [rs intForColumn:@"from_uid"];
-	        NSString *content = [rs stringForColumn:@"content"];
+	        NSString *content = [self base64DecodeString:[rs stringForColumn:@"content"]];
+            if (!content) {
+                content = [rs stringForColumn:@"content"];
+            }
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
 	        int me = (from_uid == currentUserID) ? 1 : 0;
 
@@ -836,7 +839,7 @@
 	        int from_uid = [rs intForColumn:@"from_uid"];
 	        int me = (userID == currentUserID) ? 1 : 0;
 
-	        NSString *content = [rs stringForColumn:@"content"];
+	        NSString *content = [self base64DecodeString:[rs stringForColumn:@"content"]];
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
 
 	        [tempArray addObject:@{ @"message_id":  [NSNumber numberWithInt:message_id], @"list_id":[NSNumber numberWithInt:Id], @"from_uid":[NSNumber numberWithInt:from_uid], @"content":content, @"mtime":mtime, @"me":[NSNumber numberWithInt:me] }];
@@ -873,7 +876,7 @@
 	        int Id = [rs intForColumn:@"list_id"];
 	        int message_id   = [rs intForColumn:@"message_id"];
 	        int from_uid = [rs intForColumn:@"from_uid"];
-	        NSString *content = [rs stringForColumn:@"content"];
+	        NSString *content = [self base64DecodeString:[rs stringForColumn:@"content"]];
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
 	        int me = (userID == currentUserID) ? 1 : 0;
 
@@ -890,6 +893,22 @@
 	return tempArray;
 }
 
++ (NSString *)base64EncodeString:(NSString *)srcStr
+{
+    NSData *nsdata = [srcStr dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *base64Encoded = [nsdata base64Encoding];
+    return base64Encoded;
+}
+
++ (NSString *)base64DecodeString:(NSString *)srcStr
+{
+    NSData *nsdataFromBase64String = [[[NSData alloc] initWithBase64Encoding:srcStr] autorelease];
+    
+    // Decoded NSString from the NSData
+    NSString *base64Decoded = [[[NSString alloc]
+                               initWithData:nsdataFromBase64String encoding:NSUTF8StringEncoding] autorelease];
+    return base64Decoded;
+}
 /////////////
 
 @end

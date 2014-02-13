@@ -801,7 +801,7 @@
             }
             else if (SQLITE_OK != rc) {
                 
-                if (_logsErrors) {
+                if (YES) {
                     NSLog(@"DB Error: %d \"%@\"", [self lastErrorCode], [self lastErrorMessage]);
                     NSLog(@"DB Query: %@", sql);
                     NSLog(@"DB Path: %@", _databasePath);
