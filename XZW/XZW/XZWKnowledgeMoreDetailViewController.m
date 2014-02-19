@@ -92,7 +92,8 @@
 
 		    if (contentDic[@"collection"]) {
 		        UIButton *collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		        collectButton.frame = CGRectMake(280, 52, 18, 18);
+		        collectButton.frame = CGRectMake(275, 8, 38, 28);
+                collectButton.imageEdgeInsets = UIEdgeInsetsMake(-6, 0, 0, 0);
 		        [collectButton addTarget:self action:@selector(collect:) forControlEvents:UIControlEventTouchUpInside];
 		        [collectButton setImage:[UIImage imageNamed:@"grayst"] forState:UIControlStateNormal];
 		        [collectButton setImage:[UIImage imageNamed:@"peach"] forState:UIControlStateSelected];
