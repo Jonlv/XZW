@@ -1,2 +1,2 @@
-XZW/XZW.xcodeproj/project.xcworkspace/xcuserdata/*
-XZW/XZW.xcodeproj/xcuserdata/*
+*.xcodeproj/
+!*.xcodeproj/project.pbxproj

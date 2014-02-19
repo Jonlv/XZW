@@ -15,6 +15,7 @@
 #import "IIViewDeckController.h"
 #import "XZWChatViewController.h"
 #import "XZWChatStyleTwoViewController.h"
+#import "XZWAppDelegate.h"
 
 @interface XZWGetChatFriendViewController () <UITableViewDataSource, UITableViewDelegate> {
 	UITableView *myTableView;
@@ -77,7 +78,9 @@ NSInteger csortPerson(id p1, id p2, void *context) {
 	//UITableViewIndexSearch
 	indexArray = [[NSMutableArray alloc]  init];
 
-	UILabel *tipsUL = [[UILabel alloc] initWithFrame:CGRectMake(110, 0, 320, 44)];
+    int layoutOffset = (XZWAppDelegate.VERSION_CODE >= 7.0)?20:0;
+
+	UILabel *tipsUL = [[UILabel alloc] initWithFrame:CGRectMake(110, 0 + layoutOffset, 320, 44)];
 	[tipsUL setText:@"我的联系人"];
 	tipsUL.textColor = [UIColor whiteColor];
 	tipsUL.backgroundColor = [UIColor clearColor];
@@ -87,7 +90,7 @@ NSInteger csortPerson(id p1, id p2, void *context) {
 	UIButton *freshButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	[freshButton addTarget:self action:@selector(fresh) forControlEvents:UIControlEventTouchUpInside];
 	[freshButton setImage:[UIImage imageNamed:@"fresh"] forState:UIControlStateNormal];
-	freshButton.frame = CGRectMake(270, 0, 44, 44);
+	freshButton.frame = CGRectMake(270, 0 + layoutOffset, 44, 44);
 	[self.view addSubview:freshButton];
 
 
