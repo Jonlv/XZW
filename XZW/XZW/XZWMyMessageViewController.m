@@ -16,6 +16,7 @@
 @interface XZWMyMessageViewController () <MessageDelegate> {
 
     UITableView *messageUtV;
+    ASIHTTPRequest* pollingRequest;
 }
 
 @end
@@ -79,7 +80,22 @@
 - (void)toggle
 {
     [self.navigationController.viewDeckController toggleLeftView];
-    [[[XZWPollingObject alloc] init] getNewUnReadInstanly];
+    //[[[XZWPollingObject alloc] init] getNewUnReadInstanly];
+    [XZWNetworkManager asiWithLink:XZWGetNewCount postDic:nil completionBlock:^{
+        
+        
+        if ( [[[pollingRequest responseString] objectFromJSONString][@"status"]   intValue] == 1   ) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:XZWNewMessageNotification object:[[pollingRequest responseString] objectFromJSONString][@"data"]];
+            
+        } else {
+            
+        }
+        
+    } failedBlock:^{
+        
+    }];
+
 }
 
 
