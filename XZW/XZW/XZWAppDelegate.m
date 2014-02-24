@@ -31,6 +31,10 @@
     return VERSION_CODE;
 }
 
++ (XZWAppDelegate *)sharedXZWAppDelegate;
+{
+	return (XZWAppDelegate *)[UIApplication sharedApplication].delegate;
+}
 #pragma mark - vc init
 
 
@@ -82,20 +86,18 @@
 - (void)initRootController {
 	//**************** logout notification **************//
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutAction) name:XZWLogOutNotification object:nil];
+    if (nil == self.menuVC) {
+        self.menuVC = [[[XZWMenuViewController alloc]  init]   autorelease];
+    }
+    if (nil == self.mainVC) {
+        self.mainVC = [[[XZWMainViewController alloc]  init]  autorelease];
+    }
+	if (nil == self.xzwNavVC) {
+        self.xzwNavVC = [[[UINavigationController alloc] initWithRootViewController:self.mainVC] autorelease];
+        [self.xzwNavVC.navigationBar setBackgroundImage:[UIImage imageNamed:@"top"] forBarMetrics:UIBarMetricsDefault];
+    }
 
-
-
-	XZWMenuViewController *menuVC = [[[XZWMenuViewController alloc]  init]   autorelease];
-
-	XZWMainViewController *mainVC = [[[XZWMainViewController alloc]  init]  autorelease];
-
-
-	UINavigationController *xzwNav = [[[UINavigationController alloc] initWithRootViewController:mainVC] autorelease];
-	[xzwNav.navigationBar setBackgroundImage:[UIImage imageNamed:@"top"] forBarMetrics:UIBarMetricsDefault];
-
-
-
-	IIViewDeckController *rootVC = [[[IIViewDeckController alloc] initWithCenterViewController:xzwNav leftViewController:menuVC rightViewController:[[[NSClassFromString(@"XZWGetChatFriendViewController") alloc] init]  autorelease]]  autorelease];
+	IIViewDeckController *rootVC = [[[IIViewDeckController alloc] initWithCenterViewController:self.xzwNavVC leftViewController:self.menuVC rightViewController:[[[NSClassFromString(@"XZWGetChatFriendViewController") alloc] init]  autorelease]]  autorelease];
 	rootVC.delegate = self;
 
 	rootVC.centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose;

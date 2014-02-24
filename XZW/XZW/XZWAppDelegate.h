@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "IIViewDeckController.h"
 
+@class XZWMainViewController;
+@class XZWMenuViewController;
 static float VERSION_CODE;
 
 @interface XZWAppDelegate : UIResponder <UIApplicationDelegate,IIViewDeckControllerDelegate>{
@@ -16,8 +18,10 @@ static float VERSION_CODE;
      
 }
 
-@property (strong, nonatomic) UIWindow *window;
-
+@property (retain, nonatomic) UIWindow *window;
+@property (nonatomic, retain) UINavigationController    *xzwNavVC;
+@property (nonatomic, retain) XZWMenuViewController     *menuVC;
+@property (nonatomic, retain) XZWMainViewController     *mainVC;
 + (float)VERSION_CODE;
-
++ (XZWAppDelegate *)sharedXZWAppDelegate;
 @end

@@ -88,7 +88,8 @@ static const int XZWSameZodiacStartTag = 999;
     //    }
 }
 
--(void)dealloc{
+-(void)dealloc
+{
 
     if (mainLoading) {
         [mainRequest cancel];
@@ -114,7 +115,8 @@ static const int XZWSameZodiacStartTag = 999;
 
 #pragma mark -
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated
+{
 
     self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
 
@@ -123,7 +125,8 @@ static const int XZWSameZodiacStartTag = 999;
 }
 
 
--(void)viewWillDisappear:(BOOL)animated{
+-(void)viewWillDisappear:(BOOL)animated
+{
 
     self.viewDeckController.panningMode = IIViewDeckNoPanning;
 
@@ -350,7 +353,8 @@ static const int XZWSameZodiacStartTag = 999;
 
 #pragma mark - action
 
--(void)fortuneAction{
+-(void)fortuneAction
+{
 
 
     XZWFortuneResultViewController *resultViewController = [[XZWFortuneResultViewController alloc]   initWithAstroID:[[[NSUserDefaults standardUserDefaults]      objectForKey:@"constellation"]  intValue] + 1 ];
@@ -362,7 +366,8 @@ static const int XZWSameZodiacStartTag = 999;
 #pragma mark - init
 
 
--(void)initView{
+-(void)initView
+{
 
 
     //  mainUSV.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
@@ -619,7 +624,7 @@ static const int XZWSameZodiacStartTag = 999;
 
 
     mainLoading = true;
-
+    
     mainRequest = [XZWNetworkManager asiWithLink:XZWMain postDic:nil completionBlock:^{
 
         mainLoading = false;
