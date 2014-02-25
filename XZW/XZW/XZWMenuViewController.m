@@ -30,11 +30,12 @@
 
 	int mPrivateLetterCount;
 }
-
+@property (nonatomic, retain) UINavigationController *navVC;
+@property (nonatomic, retain) XZWMainViewController  *mainVC;
+@property (nonatomic, copy)   NSIndexPath            *currentIndexPath;
 @end
 
 @implementation XZWMenuViewController
-
 
 
 #pragma mark - init
@@ -126,23 +127,25 @@
 #pragma mark -
 
 - (void)homeAction {
-	UIViewController *viewController = nil;
-	viewController = [[NSClassFromString(@"XZWMainViewController") alloc]  init];
+	if (nil == self.mainVC) {
+        self.mainVC = [XZWAppDelegate sharedXZWAppDelegate].mainVC;
+        self.navVC = [XZWAppDelegate sharedXZWAppDelegate].xzwNavVC;
+    }
 
-
-	UINavigationController *navigationController = [[[UINavigationController alloc] initWithRootViewController:viewController]  autorelease];
-
-	[navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"top"] forBarMetrics:UIBarMetricsDefault];
-
-	[viewController  release];
-
-	[self.viewDeckController setCenterController:navigationController];
+	[self.viewDeckController setCenterController:self.navVC];
 
 	[self.viewDeckController closeLeftViewAnimated:true completion: ^(IIViewDeckController *controller, BOOL success) {
 	}];
 
 
 	self.viewDeckController.panningMode = IIViewDeckFullViewPanning;
+    if (self.currentIndexPath) {
+        [menuTable.visibleCells enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            UITableViewCell *cell = obj;
+            [cell.contentView viewWithTag:9999].hidden = YES;
+        }];
+        self.currentIndexPath = nil;
+    }
 }
 
 #pragma mark - tableview
@@ -158,6 +161,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	//(start)
+    self.currentIndexPath = indexPath;
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    UIView *bg = [cell.contentView viewWithTag:9999];
+    bg.hidden = NO;
+    [tableView.visibleCells enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if (obj != cell) {
+            UITableViewCell *otherCell = obj;
+            [otherCell.contentView viewWithTag:9999].hidden = YES;
+        }
+    }];
 	{
 		UIViewController *viewController = nil;
 
@@ -473,9 +486,13 @@
 	UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-
-
-
+        UIView *selectedBg = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)] autorelease];
+        selectedBg.tag = 9999;
+        selectedBg.backgroundColor = [UIColor blackColor];
+        selectedBg.alpha = 0.3f;
+        selectedBg.hidden = YES;
+        [cell.contentView addSubview:selectedBg];
+        
 		UILabel *ul = [[UILabel alloc] initWithFrame:CGRectMake(34, 0, 160, 40)];
 		ul.backgroundColor = [UIColor clearColor];
 		ul.font = [UIFont boldSystemFontOfSize:17];
@@ -512,7 +529,13 @@
 		[dynUL release];
 	}
 
-
+    UIView *selectedBg = [cell.contentView viewWithTag:9999];
+    if (self.currentIndexPath == nil || self.currentIndexPath.row != indexPath.row) {
+        selectedBg.hidden = YES;
+    }
+    else {
+        selectedBg.hidden = NO;
+    }
 	UIImageView *leftImage = (UIImageView *)[cell.contentView viewWithTag:999];
 	UILabel *referentUL = (UILabel *)[cell.contentView viewWithTag:99];
 	UILabel *privateLetterUL = (UILabel *)[cell.contentView viewWithTag:991];
@@ -717,6 +740,14 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getNewMessage:) name:XZWNewMessageNotification object:nil];
 
 	[self initViews];
+}
+
+- (void)dealloc
+{
+    self.mainVC = nil;
+    self.navVC = nil;
+    self.currentIndexPath = nil;
+    [super dealloc];
 }
 
 - (void)getNewMessage:(NSNotification *)object {

@@ -15,6 +15,7 @@
 @protocol MessageDelegate <NSObject>
 
 -(void)clickMessageIndex:(NSDictionary*)messageDic;
+@optional
 -(void)deleteMessageIndex:(NSDictionary*)messageDic;
 
 @end
