@@ -94,6 +94,14 @@
 	[self.view addSubview:tableUTV];
 	[tableUTV release];
 
+    if (saveArray.count == 0) {
+        UILabel *tipsUL = [[UILabel alloc] initWithFrame:tableUTV.bounds];
+        tipsUL.text = @"没有保存的沙盘";
+        tipsUL.font = [UIFont systemFontOfSize:18];
+        tipsUL.textAlignment = UITextAlignmentCenter;
+        tableUTV.tableFooterView = tipsUL;
+        [tipsUL release];
+    }
 
 	UIView *backgroundView = [[UIView alloc] initWithFrame:tableUTV.bounds];
 	tableUTV.backgroundView = backgroundView;

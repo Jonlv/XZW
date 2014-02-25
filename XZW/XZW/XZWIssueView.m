@@ -84,15 +84,15 @@
             [uaiv release];
             [uaiv startAnimating];
             
+            NSDictionary* messageDic = [[resolveRequest responseData] objectFromJSONData];
+            totalPage = [[[messageDic objectForKey:@"data"] objectForKey:@"totalPages"]  intValue];
             
-            totalPage = [[[[[resolveRequest responseData]   objectFromJSONData]   objectForKey:@"data"]   objectForKey:@"totalPages"]  intValue];
-            
-            current = [[[[[resolveRequest responseData]   objectFromJSONData]   objectForKey:@"data"]   objectForKey:@"nowPage"]  intValue];
+            current = [[[messageDic objectForKey:@"data"] objectForKey:@"nowPage"] intValue];
             
             [self bringSubviewToFront:mbProgessHud];
             
             
-            if ([[[[[resolveRequest responseData]   objectFromJSONData]   objectForKey:@"data"] objectForKey:@"data"]  count]  ==0  || totalPage <= current) {
+            if ([[[messageDic objectForKey:@"data"] objectForKey:@"data"] count] ==0 || totalPage <= current) {
                 
                 isFinished = true;
                 
@@ -106,7 +106,7 @@
             
             
             
-            [zhiDaoArray setArray:[[[[resolveRequest responseData]   objectFromJSONData]   objectForKey:@"data"] objectForKey:@"data"]];
+            [zhiDaoArray setArray:[[messageDic objectForKey:@"data"] objectForKey:@"data"]];
             
             
             refreshView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - myTableView.bounds.size.height, self.frame.size.width, myTableView.bounds.size.height)];
@@ -115,9 +115,17 @@
             [refreshView release];
             
             [refreshView refreshLastUpdatedDate];
-            
-            
-            
+
+            /// 提示
+		    if ([[messageDic objectForKey:@"status"]  intValue] == 0) {
+		        UILabel *tipsUL = [[UILabel alloc] initWithFrame:self.bounds];
+		        [tipsUL setText:[messageDic objectForKey:@"info"]];
+		        tipsUL.font = [UIFont systemFontOfSize:18];
+		        tipsUL.textAlignment = UITextAlignmentCenter;
+		        myTableView.tableFooterView = tipsUL;
+		        [tipsUL release];
+			}
+
             [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:.6f];
             isLoading = false;
             

@@ -74,13 +74,13 @@
 		    [uaiv release];
 		    [uaiv startAnimating];
 
-
-		    totalPage = [[[[[resolveRequest responseData] objectFromJSONData] objectForKey:@"data"] objectForKey:@"totalPages"] intValue];
+            NSDictionary* messageDic = [[resolveRequest responseData] objectFromJSONData];
+		    totalPage = [[[messageDic objectForKey:@"data"] objectForKey:@"totalPages"] intValue];
 
 		    [self bringSubviewToFront:mbProgessHud];
 
 
-		    if ([[[[[resolveRequest responseData] objectFromJSONData] objectForKey:@"data"] objectForKey:@"data"] count] == 0 || [[[[[resolveRequest responseData]   objectFromJSONData] objectForKey:@"data"] objectForKey:@"data"] count] < 20) {
+		    if ([[[messageDic objectForKey:@"data"] objectForKey:@"data"] count] == 0 || [[[messageDic objectForKey:@"data"] objectForKey:@"data"] count] < 20) {
 		        isFinished = true;
 
 		        [myTableView.tableFooterView setHidden:true];
@@ -90,7 +90,7 @@
 			}
 
 
-		    [zhiDaoArray setArray:[[[[resolveRequest responseData] objectFromJSONData] objectForKey:@"data"] objectForKey:@"data"]];
+		    [zhiDaoArray setArray:[[messageDic objectForKey:@"data"] objectForKey:@"data"]];
 
 
 		    refreshView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - myTableView.bounds.size.height, self.frame.size.width, myTableView.bounds.size.height)];
@@ -100,7 +100,15 @@
 
 		    [refreshView refreshLastUpdatedDate];
 
-
+            /// 提示
+		    if ([[messageDic objectForKey:@"status"] intValue] == 0) {
+		        UILabel *tipsUL = [[UILabel alloc] initWithFrame:self.bounds];
+		        [tipsUL setText:[messageDic objectForKey:@"info"]];
+		        tipsUL.font = [UIFont systemFontOfSize:18];
+		        tipsUL.textAlignment = UITextAlignmentCenter;
+		        myTableView.tableFooterView = tipsUL;
+		        [tipsUL release];
+			}
 
 		    [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:1.f];
 		    isLoading = false;

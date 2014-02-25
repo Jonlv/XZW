@@ -162,10 +162,18 @@
         NSDictionary *messageDic = [[getFeedRequest responseData]   objectFromJSONData];
         
         if ([messageDic[@"status"]  intValue] == 0 ) {
-            
-            
-            
-        }else {
+
+            /// 提示
+		    if ([[messageDic objectForKey:@"status"] intValue] == 0) {
+		        UILabel *tipsUL = [[UILabel alloc] initWithFrame:self.bounds];
+		        [tipsUL setText:[messageDic objectForKey:@"info"]];
+		        tipsUL.font = [UIFont systemFontOfSize:18];
+		        tipsUL.textAlignment = UITextAlignmentCenter;
+		        myTableView.tableFooterView = tipsUL;
+		        [tipsUL release];
+			}
+
+        } else {
             
             
             totalPage = [messageDic[@"data"][@"totalPages"] intValue];
