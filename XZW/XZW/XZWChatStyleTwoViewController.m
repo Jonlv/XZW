@@ -11,6 +11,7 @@
 #import "XZWDBOperate.h"
 #import "XZWNetworkManager.h"
 #import "IIViewDeckController.h"
+#import "XZWUtil.h"
 
 @interface XZWChatStyleTwoViewController () <UITableViewDataSource, UITableViewDelegate, IIViewDeckControllerDelegate, UITextFieldDelegate, XZWChatDelegate> {
 	UITableView *chatTableView;
@@ -366,6 +367,7 @@
 
 	    if ([tempDic[@"status"] intValue] == 1) {
 	        for (int i = 0; i < [tempDic[@"data"] count]; i++) {
+                NSLog(@"mtime : %@",[XZWUtil judgeChatTimeBySendTime:tempDic[@"data"][i][@"mtime"]]);
 	            BOOL inserted = [XZWDBOperate mainInsertDataFrom:tempDic[@"data"][i] andUserID:userID];
 
 	            if (inserted) {

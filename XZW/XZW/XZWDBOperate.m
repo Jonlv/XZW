@@ -545,9 +545,9 @@
 
 + (NSArray *)getChatArrayForChatID:(int)chatID andTime:(long)time andBlock:(void (^)(NSArray *array))block {
 	NSMutableArray *tempArray = [NSMutableArray array];
-
+    int currentUserID = [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue];
 	FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:[XZWUtil getDataBase]];
-
+    
 	[queue inDatabase: ^(FMDatabase *db) {
 	    NSString *sql = [NSString stringWithFormat:
 	                     @"SELECT * FROM (select *  from  %@ where  list_id = %d and mtime < %ld order by mtime desc limit 20)    order by  mtime asc  ", MSGTable, chatID, time];
@@ -558,7 +558,7 @@
 	        int Id = [rs intForColumn:@"list_id"];
 	        int message_id   = [rs intForColumn:@"message_id"];
 	        int from_uid = [rs intForColumn:@"from_uid"];
-	        int me = [rs intForColumn:@"me"];
+	        int me = (from_uid == currentUserID) ? 1 : 0;
 
 	        NSString *content = [self base64DecodeString:[rs stringForColumn:@"content"]];
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
@@ -578,12 +578,12 @@
 
 + (NSArray *)getChatArrayForChatID:(int)chatID andUserID:(int)userID andTime:(long)time andBlock:(void (^)(NSArray *array))block {
 	NSMutableArray *tempArray = [NSMutableArray array];
-
+    int currentUserID = [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue];
 	FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:[XZWUtil getDataBase]];
 
 	[queue inDatabase: ^(FMDatabase *db) {
 	    NSString *sql = [NSString stringWithFormat:
-	                     @"SELECT * FROM (select *  from  %@ where  ( list_id = %d  or (from_uid = %d and toid = %d ) or (from_uid = %d and toid = %d ))   and mtime < %ld order by mtime desc limit 20)    order by  mtime asc  ", MSGTable, chatID, userID, [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue], [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue], userID, time];
+	                     @"SELECT * FROM (select *  from  %@ where  ( list_id = %d  or (from_uid = %d and toid = %d ) or (from_uid = %d and toid = %d ))   and mtime < %ld order by mtime desc limit 20)    order by  mtime asc  ", MSGTable, chatID, userID, currentUserID, currentUserID, userID, time];
 
 
 	    FMResultSet *rs = [db executeQuery:sql];
@@ -591,7 +591,7 @@
 	        int Id = [rs intForColumn:@"list_id"];
 	        int message_id   = [rs intForColumn:@"message_id"];
 	        int from_uid = [rs intForColumn:@"from_uid"];
-	        int me = [rs intForColumn:@"me"];
+	        int me = (from_uid == currentUserID) ? 1 : 0;
 
 	        NSString *content = [self base64DecodeString:[rs stringForColumn:@"content"]];
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
@@ -611,7 +611,7 @@
 
 + (NSArray *)getChatArrayForChatID:(int)chatID andBlock:(void (^)(NSArray *array))block {
 	NSMutableArray *tempArray = [NSMutableArray array];
-
+    int currentUserID = [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue];
 	FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:[XZWUtil getDataBase]];
 
 	[queue inDatabase: ^(FMDatabase *db) {
@@ -626,7 +626,7 @@
 	        int from_uid = [rs intForColumn:@"from_uid"];
 	        NSString *content = [self base64DecodeString:[rs stringForColumn:@"content"]];
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
-	        int me = [rs intForColumn:@"me"];
+	        int me = (from_uid == currentUserID) ? 1 : 0;
 
 	        [tempArray addObject:@{ @"message_id":  [NSNumber numberWithInt:message_id], @"list_id":[NSNumber numberWithInt:Id], @"from_uid":[NSNumber numberWithInt:from_uid], @"content":content, @"mtime":mtime, @"me":[NSNumber numberWithInt:me] }];
 		}
@@ -644,7 +644,7 @@
 
 + (NSArray *)getChatArrayForChatID:(int)chatID andUserID:(int)userID andBlock:(void (^)(NSArray *array))block {
 	NSMutableArray *tempArray = [NSMutableArray array];
-
+    
 	FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:[XZWUtil getDataBase]];
     int currentUserID = [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue];
 	[queue inDatabase: ^(FMDatabase *db) {
@@ -829,8 +829,8 @@
     int currentUserID = [[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] intValue];
 	[queue inDatabase: ^(FMDatabase *db) {
 	    NSString *sql = [NSString stringWithFormat:
-	                     @"SELECT * FROM (select *  from  %@ where    (from_uid = %d and toid = %d ) or (from_uid = %d and toid = %d )  and mtime < %ld order by mtime desc limit 20)    order by  mtime asc  ", MSGTable, userID, currentUserID, currentUserID, userID, time];
-
+	                     @"SELECT * FROM (select *  from  %@ where    ((from_uid = %d and toid = %d ) or (from_uid = %d and toid = %d ))  and mtime < %ld order by mtime desc limit 20)    order by  mtime asc  ", MSGTable, userID, currentUserID, currentUserID, userID, time];
+        
 
 	    FMResultSet *rs = [db executeQuery:sql];
 	    while ([rs next]) {
@@ -878,7 +878,7 @@
 	        int from_uid = [rs intForColumn:@"from_uid"];
 	        NSString *content = [self base64DecodeString:[rs stringForColumn:@"content"]];
 	        NSString *mtime = [rs stringForColumn:@"mtime"];
-	        int me = (userID == currentUserID) ? 1 : 0;
+	        int me = (from_uid == currentUserID) ? 1 : 0;
 
 	        [tempArray addObject:@{ @"message_id":  [NSNumber numberWithInt:message_id], @"list_id":[NSNumber numberWithInt:Id], @"from_uid":[NSNumber numberWithInt:from_uid], @"content":content, @"mtime":mtime, @"me":[NSNumber numberWithInt:me] }];
 		}
@@ -902,12 +902,15 @@
 
 + (NSString *)base64DecodeString:(NSString *)srcStr
 {
+    if (!srcStr) {
+        return @"";
+    }
     NSData *nsdataFromBase64String = [[[NSData alloc] initWithBase64Encoding:srcStr] autorelease];
     
     // Decoded NSString from the NSData
     NSString *base64Decoded = [[[NSString alloc]
                                initWithData:nsdataFromBase64String encoding:NSUTF8StringEncoding] autorelease];
-    return base64Decoded;
+    return (base64Decoded == nil) ? @"" : base64Decoded;
 }
 /////////////
 

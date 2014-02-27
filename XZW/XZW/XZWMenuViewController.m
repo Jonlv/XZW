@@ -530,11 +530,11 @@
 	}
 
     UIView *selectedBg = [cell.contentView viewWithTag:9999];
-    if (self.currentIndexPath == nil || self.currentIndexPath.row != indexPath.row) {
-        selectedBg.hidden = YES;
+    if (self.currentIndexPath != nil && self.currentIndexPath.row == indexPath.row && self.currentIndexPath.section == indexPath.section) {
+        selectedBg.hidden = NO;
     }
     else {
-        selectedBg.hidden = NO;
+        selectedBg.hidden = YES;
     }
 	UIImageView *leftImage = (UIImageView *)[cell.contentView viewWithTag:999];
 	UILabel *referentUL = (UILabel *)[cell.contentView viewWithTag:99];

@@ -331,14 +331,13 @@
 -(void)snsAction{
 
 
-
+//    XZWChatStyleTwoViewController* chatVC = [[XZWChatStyleTwoViewController alloc]   initWithUserID:[profileDic[@"uid"] intValue] nameString:profileDic[@"uname"] avatarString:profileDic[@"avatar"] andChatID:[profileDic[@"list_id"] intValue]];
+//    [self.navigationController pushViewController:chatVC animated:true];
+//    [chatVC release];
     XZWChatStyleTwoViewController *chatVC = [[XZWChatStyleTwoViewController alloc]initWithUserID:userID nameString:[profileDic  objectForKey:@"uname"] avatarString:[profileDic  objectForKey:@"avatar"]];
     [self.navigationController pushViewController:chatVC animated:true];
     [chatVC release];
 
-    //    XZWChatViewController *chatVC = [[XZWChatViewController alloc]initWithUserID:userID nameString:[profileDic  objectForKey:@"uname"] avatarString:[profileDic  objectForKey:@"avatar"]];
-    //    [self.navigationController pushViewController:chatVC animated:true];
-    //    [chatVC release];
 
 
 }
