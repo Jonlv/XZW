@@ -847,6 +847,17 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 #pragma clang diagnostic pop
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+
+- (UIViewController *)childViewControllerForStatusBarHidden {
+    return self.centerController;
+}
+
+- (UIViewController *)childViewControllerForStatusBarStyle {
+    return self.centerController;
+}
+
+#endif
 
 #pragma mark - Appearance
 
@@ -2969,6 +2980,10 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
             }
             
             [self setSlidingAndReferenceViews];
+
+            CGRect centerViewFrame = self.centerView.frame;
+            self.centerView.frame = self.centerViewBounds;
+
             controller.view.frame = currentFrame;
             controller.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             controller.view.hidden = NO;
@@ -2976,13 +2991,21 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
             
             if (barHidden) 
                 navController.navigationBarHidden = NO;
+
+            self.centerView.frame = centerViewFrame;
             
             [self addPanners];
             [self applyShadowToSlidingViewAnimated:NO];
             if ([self safe_shouldManageAppearanceMethods]) [controller viewDidAppear:NO];
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+            if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+                [self setNeedsStatusBarAppearanceUpdate];
+            }
+#endif
         };
     }
-    
+
     // start the transition
     if (_centerController) {
         currentFrame = _centerController.view.frame;
