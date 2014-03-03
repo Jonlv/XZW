@@ -38,6 +38,7 @@
 	BOOL gettingNextPage;
 
 	BOOL goOut;
+    NSTimeInterval getFriendChatDelay;
 }
 
 @property (nonatomic, retain) NSString *chatNameString;
@@ -231,7 +232,7 @@
 			}
 		    else {
 		        [chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[chatArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:false];
-
+                getFriendChatDelay = 10.f;
 		        [self getFriendChat];
 			}
 		}];
@@ -249,7 +250,7 @@
 			}
 		    else {
 		        [chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[chatArray count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:false];
-
+                getFriendChatDelay = 10.f;
 		        [self getFriendChat];
 			}
 		}];
@@ -339,7 +340,7 @@
 
 
 	if (isGettingChat) {
-		[self performSelector:@selector(getFriendChat) withObject:nil afterDelay:10.f];
+		[self performSelector:@selector(getFriendChat) withObject:nil afterDelay:getFriendChatDelay];
 		return;
 	}
 
@@ -371,6 +372,7 @@
 	            BOOL inserted = [XZWDBOperate mainInsertDataFrom:tempDic[@"data"][i] andUserID:userID];
 
 	            if (inserted) {
+                    getFriendChatDelay = 2.f;
 	                [chatArray addObject:tempDic[@"data"][i]];
 				}
 
@@ -400,11 +402,11 @@
 
 	    isGettingChat = false;
 
-	    [self performSelector:@selector(getFriendChat) withObject:nil afterDelay:10.f];
+	    [self performSelector:@selector(getFriendChat) withObject:nil afterDelay:getFriendChatDelay];
 	} failedBlock: ^{
 	    isGettingChat = false;
-
-	    [self performSelector:@selector(getFriendChat) withObject:nil afterDelay:10.f];
+        getFriendChatDelay = 10.f;
+	    [self performSelector:@selector(getFriendChat) withObject:nil afterDelay:getFriendChatDelay];
 	}];
 }
 
